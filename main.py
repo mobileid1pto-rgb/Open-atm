@@ -35,6 +35,14 @@ def clear():
     os.system("clear")
 
 
+class Account():
+    def __init__(self, acc_num, name, pin, balance):
+        self.acc_num = acc_num
+        self.name = name
+        self.pin = pin
+        self.balance = balance
+
+
 class Account_Action():
     @staticmethod
     def create_account(name):
@@ -44,7 +52,8 @@ class Account_Action():
         while acc_num in accounts:
             acc_num = str(random.randint(200000, 999999))
         pin = str(random.randint(1000, 9999))
-        accounts[acc_num] = {"name": name, "pin": pin, "balance": 0}
+        balance = random.randint(5000, 25000)
+        accounts[acc_num] = {"name": name, "pin": pin, "balance": balance}
         save_accounts(accounts)
         print(f"Your Account Number: {acc_num}")
         print(f"Your PIN: {pin}")
@@ -55,8 +64,14 @@ class Account_Action():
         accounts = load_accounts()
         account = accounts.get(acc_num)
         if account and account["pin"] == pin:
-            return account
-        return None
+            Active_Account = Account(
+                account,
+                account["name"],
+                account["pin"],
+                account["balance"])
+            print(Active_Account)
+        else:
+            input("Invalud Account\nEnter to continue..")
 
 
 class Messages():
@@ -102,7 +117,5 @@ while True:
         Messages.start_message()
         acc, pin = Messages.login_screen()
         account = Account_Action.log_in(acc, pin)
-        if account is None:
-            input("Invalid Account\nEnter to continue..")
     else:
         input("Invalid Input\nEnter to continue..")
